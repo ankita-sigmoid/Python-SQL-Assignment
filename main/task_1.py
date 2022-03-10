@@ -10,7 +10,7 @@ names and their managers and save in a xlsx file.
 
 class EmployeeList:
 
-    def write_to_excel(records):
+    def write_to_excel(self, records):
         workbook = xlsxwriter.Workbook('task_1.xlsx')
         worksheet = workbook.add_worksheet()
 
@@ -28,7 +28,7 @@ class EmployeeList:
 
         workbook.close()
 
-    def connect():
+    def connect(self):
         """ Connect to the PostgreSQL database server """
         conn = None
         try:
@@ -43,7 +43,8 @@ class EmployeeList:
             cur = conn.cursor()
 
             # query
-            query = 'SELECT e1.empno, e1.ename as emp_name, e2.ename as mgr_name from emp as e1 INNER JOIN emp as e2 on (e1.mgr=e2.empno);'
+            query = 'SELECT e1.empno, e1.ename as emp_name, e2.ename as mgr_name from ' \
+                    'emp as e1 LEFT JOIN emp as e2 on (e1.mgr=e2.empno);'
             cur.execute(query)
             records = cur.fetchall()
 
@@ -51,7 +52,7 @@ class EmployeeList:
             records.insert(0, [cur.description[i].name for i in range(len(cur.description))])
 
             # writing files to xlsx file
-            write_to_excel(records)
+            self.write_to_excel(records)
 
             # close the communication with the PostgreSQL
             cur.close()
@@ -63,5 +64,6 @@ class EmployeeList:
                 print('Database connection closed.')
 
 
-    if __name__ == '__main__':
-        connect()
+if __name__ == '__main__':
+    obj = EmployeeList()
+    obj.connect()

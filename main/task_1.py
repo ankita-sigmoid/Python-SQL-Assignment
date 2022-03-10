@@ -11,7 +11,7 @@ names and their managers and save in a xlsx file.
 class EmployeeList:
 
     def write_to_excel(self, records):
-        workbook = xlsxwriter.Workbook('task_1.xlsx')
+        workbook = xlsxwriter.Workbook('Output/task_1.xlsx')
         worksheet = workbook.add_worksheet()
 
         row = 0

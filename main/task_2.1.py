@@ -4,6 +4,13 @@ from configuration import config
 import pandas as pd
 import xlsxwriter
 
+"""
+Task 2:
+Write a python program to list the Total compensation  given till his/her 
+last date or till now of all the employees till date in a xlsx file.
+"""
+
+
 
 def write_to_excel(rows):
     c1 = []
@@ -24,7 +31,7 @@ def write_to_excel(rows):
     df = pd.DataFrame({'Employee Name': c1, 'Employee No': c2, 'Dept No': c3, 'Dept Name': c4, 'Total Compensation': c5,
                        'Months Spent': c6})
     writer = pd.ExcelWriter(
-        '/main/task_2.xlsx')
+        'Output/task_2.xlsx')
     df.to_excel(writer, sheet_name='Q2', index=False)
     writer.save()
 
@@ -45,9 +52,11 @@ def connect():
 
         cur.execute("UPDATE jobhist SET enddate=CURRENT_DATE WHERE enddate IS NULL;")
         data = cur.execute(
-            "SELECT emp.ename, jh.empno, jh.deptno, dept.dname, ROUND((jh.enddate-jh.startdate)/30*jh.sal,0) "
-            "AS total_compensation, ROUND((jh.enddate-jh.startdate)/30,0) as months_spent FROM "
-            "jobhist as jh INNER JOIN dept ON jh.deptno=dept.deptno INNER JOIN emp ON jh.empno=emp.empno;")
+            "SELECT emp.ename, emp.empno, dept.deptno, dept.dname, "
+            "SUM(ROUND((jh.enddate-jh.startdate)/30*jh.sal)) "
+            "AS total_compensation, SUM(ROUND((jh.enddate-jh.startdate)/30)) as months_spent FROM "
+            "emp join dept on emp.deptno = dept.deptno join jobhist as jh on "
+            "emp.empno = jh.empno GROUP BY  emp.empno, dept.deptno, dept.dname;")
         rows = cur.fetchall()
 
         # writing files to xlsx file

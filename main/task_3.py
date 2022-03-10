@@ -26,7 +26,7 @@ class ExcelToSQL:
             self.logger.info("Execution Successful.")
 
     def convert_to_sql(self):
-        with pd.ExcelFile('task_2.xlsx') as xls:
+        with pd.ExcelFile('Output/task_2.xlsx') as xls:
             for sheet_name in xls.sheet_names:
                 self.read_sheets(sheet_name, xls)
 
